@@ -6,6 +6,45 @@ import "winner.dart";
 bool turn = true; // player 1 is true, player 2 is false
 bool winner = false;
 
+void prompt (bool player) {
+  if (player) {
+    print("Player 1, choose a column");
+    String selectedColumn = stdin.readLineSync();
+
+    try {
+      int testNumber = int.parse(selectedColumn);
+
+      if (testNumber > 8 || testNumber < 1) {
+        print("Your number must be in the range 1-8");
+        prompt(player);
+      } else {
+        playGame(selectedColumn, true);
+      }
+    }
+    on FormatException {
+      print("You must enter a valid number");
+      prompt(player);
+    }
+  } else {
+    print("Player 2, choose a column");
+    String selectedColumn = stdin.readLineSync();
+
+    try {
+      int testNumber = int.parse(selectedColumn);
+
+      if (testNumber > 8 || testNumber < 1) {
+        print("Your number must be in the range 1-8");
+        prompt(player);
+      } else {
+        playGame(selectedColumn, true);
+      }
+    } on FormatException {
+      print("You must enter a valid number");
+      prompt(player);
+    }
+  }
+}
+
 void main () {
   print("Connect 4");
   print("Player 1 controls the X chips");
@@ -13,10 +52,7 @@ void main () {
   while (!winner) {
     printBoard();
     if (turn == true) {
-      print("Player 1, choose a column");
-      String selectedColumn = stdin.readLineSync();
-
-      playGame(selectedColumn, true);
+      prompt(true);
 
       if (determineWinner(true)) {
         print ("Player 1 wins");
@@ -25,10 +61,7 @@ void main () {
         turn = false;
       }
     } else {
-      print("Player 2, choose a column");
-      String selectedColumn = stdin.readLineSync();
-
-      playGame(selectedColumn, false);
+      prompt(false);
 
       if (determineWinner(false)) {
         print ("Player 2 wins");
